@@ -22,7 +22,7 @@ public class Draw {
     }
 
     public Draw() {
-        
+
     }
 
     public void setUuid(String uuid) {

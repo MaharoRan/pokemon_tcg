@@ -27,7 +27,7 @@ public class Card {
 
     private int generateRarity() {
         Random random = new Random();
-        return random.nextInt(5) + 1; // Example: Random rarity from 1 to 5
+        return random.nextInt(5) + 1;
     }
 
     public String getPokemonUuid() {
