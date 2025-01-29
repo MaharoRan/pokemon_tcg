@@ -20,7 +20,7 @@ public class CardController {
 
     @GetMapping
     public List<Card> getAllCards() {
-        return cardService.getAllCards(); // Fetch all cards
+        return cardService.getAllCards(); 
     }
 
     @PostMapping
@@ -31,6 +31,6 @@ public class CardController {
 
     private int generateRandomRarity() {
         Random random = new Random();
-        return random.nextInt(5) + 1; // Random rarity from 1 to 5
+        return random.nextInt(5) + 1; 
     }
 }

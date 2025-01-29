@@ -62,12 +62,25 @@ public class DresseurController {
 		Random random = new Random();
 
 		for (int i = 0; i < 5; i++) {
-			Card card = cards.get(random.nextInt(cards.size())); // Randomly select a card
+			Card card = cards.get(random.nextInt(cards.size()));
 			Draw draw = new Draw(dresseurId, card.getUuid(), new Date());
 			draws.add(draw);
 		}
 
 		 return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@PostMapping("/createDresseurCards")
+	public ResponseEntity<?> createDresseurCards(@RequestBody Dresseur dresseur) {
+		for (int i = 0; i < 5; i++) {
+			Card card = new Card("pokemonId" + i, "attack1", "attack2");
+			if(dresseur.getCardList().size()<=5){
+			dresseur.getCardList().add(card);
+		}else{
+			dresseur.getSecondCardList().add(card);
+		}
+		}
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@PatchMapping("/{uuid}/acheter")

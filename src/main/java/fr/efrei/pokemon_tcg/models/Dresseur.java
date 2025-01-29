@@ -24,6 +24,9 @@ public class Dresseur {
 	@OneToMany
 	private List<Card> cardList;
 
+	@OneToMany
+	private List<Card> secondCardList;
+
 	public String getUuid() {
 		return uuid;
 	}
@@ -70,5 +73,13 @@ public class Dresseur {
 
 	public void setCardList(List<Card> cardList) {
 		this.cardList = cardList;
+	}
+
+	public List<Card> getSecondCardList() {
+		return secondCardList;
+	}
+
+	public void setSecondCardList(List<Card> secondCardList) {
+		this.secondCardList = secondCardList;
 	}
 }

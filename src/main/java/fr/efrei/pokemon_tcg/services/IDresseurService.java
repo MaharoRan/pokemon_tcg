@@ -16,4 +16,6 @@ public interface IDresseurService {
 	boolean delete(String uuid);
 
 	void capturerPokemon(String uuid, CapturePokemon capturePokemon);
+
+	void possederCartes(String uuid);
 }
