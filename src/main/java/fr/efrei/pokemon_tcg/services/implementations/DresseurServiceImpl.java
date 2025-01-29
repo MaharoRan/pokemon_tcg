@@ -2,6 +2,7 @@ package fr.efrei.pokemon_tcg.services.implementations;
 
 import fr.efrei.pokemon_tcg.dto.CapturePokemon;
 import fr.efrei.pokemon_tcg.dto.DresseurDTO;
+import fr.efrei.pokemon_tcg.models.Card;
 import fr.efrei.pokemon_tcg.models.Dresseur;
 import fr.efrei.pokemon_tcg.models.Pokemon;
 import fr.efrei.pokemon_tcg.repositories.DresseurRepository;
@@ -17,9 +18,12 @@ public class DresseurServiceImpl implements IDresseurService {
 
 	private final DresseurRepository repository;
 	private final IPokemonService pokemonService;
-	public DresseurServiceImpl(DresseurRepository repository, PokemonServiceImpl pokemonService) {
+	private final CardService cardService;
+
+	public DresseurServiceImpl(DresseurRepository repository, PokemonServiceImpl pokemonService, CardService cardService) {
 		this.repository = repository;
 		this.pokemonService = pokemonService;
+		this.cardService = cardService;
 	}
 
 	@Override
@@ -60,4 +64,12 @@ public class DresseurServiceImpl implements IDresseurService {
 		repository.save(dresseur);
 		return true;
 	}
+
+	/*@Override
+	public void possederCartes(String uuid) {
+		Dresseur dresseur = findById(uuid);
+	//	Card card = cardService.getAllCards();
+		dresseur.getCardList().add(card);
+		repository.save(dresseur);
+	}*/
 }

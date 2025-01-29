@@ -56,8 +56,8 @@ public class DresseurController {
 	}
 
 	 @PostMapping("/tirer")
-	public List<Draw> tirerCartes(@RequestParam String dresseurId) {
-		List<Card> cards = cardService.getAllCards(); // Fetch all available cards
+	public ResponseEntity<?> tirerCartes(@RequestParam String dresseurId) {
+		List<Card> cards = cardService.getAllCards();
 		List<Draw> draws = new ArrayList<>();
 		Random random = new Random();
 
@@ -67,7 +67,7 @@ public class DresseurController {
 			draws.add(draw);
 		}
 
-		return draws;
+		 return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@PatchMapping("/{uuid}/acheter")
