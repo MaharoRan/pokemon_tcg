@@ -1,30 +1,36 @@
 package fr.efrei.pokemon_tcg.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
 import java.util.Date;
 
+@Entity
 public class Draw {
-    private String id;
+    @Id
+    @GeneratedValue
+    private String uuid;
     private String pokemonUuid;
     private String cardUuid;
     private Date date;
 
     public Draw(String pokemonUuid, String cardUuid, Date date) {
-        this.id = generateId();
         this.pokemonUuid = pokemonUuid;
         this.cardUuid = cardUuid;
         this.date = date;
     }
 
-    private String generateId() {
-        return "";
+    public Draw() {
+        
     }
 
-    public String getId() {
-        return id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getUuid() {
+        return uuid;
     }
 
     public String getPokemonUuid() {

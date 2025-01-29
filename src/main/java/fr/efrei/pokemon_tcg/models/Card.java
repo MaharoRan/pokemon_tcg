@@ -1,8 +1,16 @@
 package fr.efrei.pokemon_tcg.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Random;
 
+@Entity
 public class Card {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String uuid;
     private String pokemonUuid;
     private String attack1;
@@ -10,28 +18,16 @@ public class Card {
     private int rarity;
 
     public Card(String pokemonUuid, String attack1, String attack2) {
-        this.uuid = generateId();
-        this.pokemonUuid = pokemonUuid;
-        this.attack1 = attack1;
-        this.attack2 = attack2;
         this.rarity = generateRarity();
     }
 
-    private String generateId() {
-        return "";
+    public Card() {
+
     }
 
     private int generateRarity() {
         Random random = new Random();
         return random.nextInt(5) + 1; // Example: Random rarity from 1 to 5
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public String getPokemonUuid() {
@@ -66,4 +62,11 @@ public class Card {
         this.rarity = rarity;
     }
 
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
 }
