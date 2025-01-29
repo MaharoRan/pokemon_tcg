@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ICardService {
     List<Card> getAllCards();
+    void saveCard(Card card);
 }
