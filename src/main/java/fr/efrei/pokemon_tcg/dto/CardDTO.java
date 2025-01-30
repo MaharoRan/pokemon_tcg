@@ -2,13 +2,13 @@ package fr.efrei.pokemon_tcg.dto;
 
 import fr.efrei.pokemon_tcg.models.Card;
 
+import java.util.Random;
+
 public class CardDTO extends Card {
     private String pokemon_id;
     private String attack1;
     private String attack2;
-
-    public CardDTO(String s, String attack1, String attack2) {
-    }
+    private int rarity;
 
     public CardDTO() {
 

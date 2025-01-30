@@ -57,9 +57,9 @@ public class DresseurController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	 @PatchMapping("/{uuid}/tirer")
-	public ResponseEntity<?> tirerCartes(@RequestParam String dresseurId, DrawServiceImpl drawServiceImpl) {
-		List<Card> cards = cardServiceImpl.getAllCards();
+	/* @PatchMapping("/{uuid}/tirer")
+	public ResponseEntity<?> tirerCartes(@RequestBody String uuid) {
+		List<CardDTO> cards = cardDTO.
 		List<Draw> draws = drawServiceImpl.getAllDraws();
 		Random random = new Random();
 
@@ -70,11 +70,13 @@ public class DresseurController {
 		}
 
 		 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
+	}*/
 
 	@PatchMapping("/{uuid}/createDresseurCards")
-	public ResponseEntity<?> createDresseurCards(@RequestBody DresseurDTO dresseurDTO) {
-		for (int i = 0; i < 10; i++) {
+	public ResponseEntity<?> createDresseurCards(
+			@PathVariable String uuid,
+			@RequestBody DresseurDTO dresseurDTO) {
+		for (int i = 0; i < 5; i++) {
 			CardDTO card = new CardDTO();
 
 			if (dresseurDTO.getCardList().size() < 5) {
