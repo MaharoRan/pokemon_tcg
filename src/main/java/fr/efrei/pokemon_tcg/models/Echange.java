@@ -40,19 +40,16 @@ public class Echange {
     private String participant1;
     private String participant2;
 
-    // Default constructor
     public Echange() {
         this.cards = new ArrayList<>();
     }
 
-    // Parameterized constructor
     public Echange(List<Card> cards, String participant1, String participant2) {
         this.cards = cards;
         this.participant1 = participant1;
         this.participant2 = participant2;
     }
 
-    // Getters and Setters
     public UUID getId() {
         return id;
     }
@@ -125,7 +122,6 @@ public class Echange {
         this.participant2 = participant2;
     }
 
-    // Method to display exchange details
     public void displayExchangeDetails() {
         System.out.println("Exchange between " + participant1 + " and " + participant2);
         System.out.println("Cards involved:");
