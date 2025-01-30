@@ -23,7 +23,12 @@ public class Card {
 
     private int generateRarity() {
         Random random = new Random();
-        return random.nextInt(5) + 1;
+        int chance = random.nextInt(100);
+        if (chance < 50) return 1;
+        else if (chance < 80) return 2;
+        else if (chance < 90) return 3;
+        else if (chance < 98) return 4;
+        else return 5;
     }
 
     public String getPokemonUuid() {

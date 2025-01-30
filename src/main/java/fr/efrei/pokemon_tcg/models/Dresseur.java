@@ -113,4 +113,5 @@ public class Dresseur {
 	public void setLastExchangeDate(LocalDateTime lastExchangeDate) {
 		this.lastExchangeDate = lastExchangeDate;
 	}
+
 }
