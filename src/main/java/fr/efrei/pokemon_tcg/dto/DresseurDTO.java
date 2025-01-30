@@ -7,11 +7,6 @@ public class DresseurDTO {
 
 	private String prenom;
 
-	private List<CardDTO> cardList;
-
-	private List<CardDTO> secondCardList;
-
-	private List<DrawDTO> drawList;
 
 	public String getNom() {
 		return nom;
@@ -21,15 +16,4 @@ public class DresseurDTO {
 		return prenom;
 	}
 
-	public List<CardDTO> getCardList() {
-		return cardList;
-	}
-
-	public List<CardDTO> getSecondCardList() {
-		return secondCardList;
-	}
-
-	public List<DrawDTO> getDrawList() {
-		return drawList;
-	}
 }
