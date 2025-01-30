@@ -38,15 +38,7 @@ public class DresseurController {
 
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody DresseurDTO dresseurDTO) {
-		for (int i = 0; i < 5; i++) {
-			CardDTO card = new CardDTO();
-			if (dresseurDTO.getCardList().size() <= 5) {
-				dresseurDTO.getCardList().add(card);
-			} else {
-				dresseurDTO.getSecondCardList().add(card);
-			}
 			dresseurService.create(dresseurDTO);
-		}
 		return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -65,7 +57,7 @@ public class DresseurController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	 @PostMapping("/tirer")
+	 @PatchMapping("/{uuid}/tirer")
 	public ResponseEntity<?> tirerCartes(@RequestParam String dresseurId, DrawServiceImpl drawServiceImpl) {
 		List<Card> cards = cardServiceImpl.getAllCards();
 		List<Draw> draws = drawServiceImpl.getAllDraws();
@@ -77,9 +69,22 @@ public class DresseurController {
 			draws.add(draw);
 		}
 
-		 return new ResponseEntity<>(HttpStatus.CREATED);
+		 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
+	@PatchMapping("/{uuid}/createDresseurCards")
+	public ResponseEntity<?> createDresseurCards(@RequestBody DresseurDTO dresseurDTO) {
+		for (int i = 0; i < 10; i++) {
+			CardDTO card = new CardDTO();
+
+			if (dresseurDTO.getCardList().size() < 5) {
+				dresseurDTO.getCardList().add(card);
+			} else {
+				dresseurDTO.getSecondCardList().add(card);
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 
 	@PatchMapping("/{uuid}/acheter")
 	public ResponseEntity<?> acheter() {
