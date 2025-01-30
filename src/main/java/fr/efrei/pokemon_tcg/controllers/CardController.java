@@ -1,8 +1,7 @@
 package fr.efrei.pokemon_tcg.controllers;
 
 import fr.efrei.pokemon_tcg.models.Card;
-import fr.efrei.pokemon_tcg.services.implementations.CardService;
-import fr.efrei.pokemon_tcg.services.implementations.CardService;
+import fr.efrei.pokemon_tcg.services.implementations.CardServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,21 +11,21 @@ import java.util.Random;
 @RequestMapping("/cards")
 public class CardController {
 
-    private final CardService cardService;
+    private final CardServiceImpl cardServiceImpl;
 
-    public CardController(CardService cardService) {
-        this.cardService = cardService;
+    public CardController(CardServiceImpl cardServiceImpl) {
+        this.cardServiceImpl = cardServiceImpl;
     }
 
     @GetMapping
     public List<Card> getAllCards() {
-        return cardService.getAllCards(); 
+        return cardServiceImpl.getAllCards();
     }
 
     @PostMapping
     public Card createCard(@RequestBody Card card) {
         card.setRarity(generateRandomRarity());
-        return cardService.saveCard(card);
+        return cardServiceImpl.saveCard(card);
     }
 
     private int generateRandomRarity() {

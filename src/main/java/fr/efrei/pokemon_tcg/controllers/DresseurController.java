@@ -1,18 +1,20 @@
 package fr.efrei.pokemon_tcg.controllers;
 
 import fr.efrei.pokemon_tcg.dto.CapturePokemon;
+import fr.efrei.pokemon_tcg.dto.CardDTO;
+import fr.efrei.pokemon_tcg.dto.DrawDTO;
 import fr.efrei.pokemon_tcg.dto.DresseurDTO;
 import fr.efrei.pokemon_tcg.models.Card;
 import fr.efrei.pokemon_tcg.models.Draw;
 import fr.efrei.pokemon_tcg.models.Dresseur;
 import fr.efrei.pokemon_tcg.services.IDresseurService;
-import fr.efrei.pokemon_tcg.services.implementations.CardService;
+import fr.efrei.pokemon_tcg.services.implementations.CardServiceImpl;
+import fr.efrei.pokemon_tcg.services.implementations.DrawServiceImpl;
 import fr.efrei.pokemon_tcg.services.implementations.DresseurServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -22,11 +24,11 @@ import java.util.Random;
 public class DresseurController {
 
 	private final IDresseurService dresseurService;
-	private final CardService cardService;
+	private final CardServiceImpl cardServiceImpl;
 
-	public DresseurController(DresseurServiceImpl dresseurService, CardService cardService) {
+	public DresseurController(DresseurServiceImpl dresseurService, CardServiceImpl cardServiceImpl) {
 		this.dresseurService = dresseurService;
-		this.cardService = cardService;
+		this.cardServiceImpl = cardServiceImpl;
 	}
 
 	@GetMapping
@@ -36,9 +38,17 @@ public class DresseurController {
 
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody DresseurDTO dresseurDTO) {
-		dresseurService.create(dresseurDTO);
+		for (int i = 0; i < 5; i++) {
+			CardDTO card = new CardDTO();
+			if (dresseurDTO.getCardList().size() <= 5) {
+				dresseurDTO.getCardList().add(card);
+			} else {
+				dresseurDTO.getSecondCardList().add(card);
+			}
+			dresseurService.create(dresseurDTO);
+		}
 		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
+    }
 
 	@DeleteMapping("/{uuid}")
 	public ResponseEntity<?> delete(@PathVariable String uuid) {
@@ -56,32 +66,20 @@ public class DresseurController {
 	}
 
 	 @PostMapping("/tirer")
-	public ResponseEntity<?> tirerCartes(@RequestParam String dresseurId) {
-		List<Card> cards = cardService.getAllCards();
-		List<Draw> draws = new ArrayList<>();
+	public ResponseEntity<?> tirerCartes(@RequestParam String dresseurId, DrawServiceImpl drawServiceImpl) {
+		List<Card> cards = cardServiceImpl.getAllCards();
+		List<Draw> draws = drawServiceImpl.getAllDraws();
 		Random random = new Random();
 
 		for (int i = 0; i < 5; i++) {
 			Card card = cards.get(random.nextInt(cards.size()));
-			Draw draw = new Draw(dresseurId, card.getUuid(), new Date());
+			Draw draw = new Draw();
 			draws.add(draw);
 		}
 
 		 return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-	@PostMapping("/createDresseurCards")
-	public ResponseEntity<?> createDresseurCards(@RequestBody Dresseur dresseur) {
-		for (int i = 0; i < 5; i++) {
-			Card card = new Card("pokemonId" + i, "attack1", "attack2");
-			if(dresseur.getCardList().size()<=5){
-			dresseur.getCardList().add(card);
-		}else{
-			dresseur.getSecondCardList().add(card);
-		}
-		}
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
 
 	@PatchMapping("/{uuid}/acheter")
 	public ResponseEntity<?> acheter() {

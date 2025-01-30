@@ -18,12 +18,12 @@ public class DresseurServiceImpl implements IDresseurService {
 
 	private final DresseurRepository repository;
 	private final IPokemonService pokemonService;
-	private final CardService cardService;
+	private final CardServiceImpl cardServiceImpl;
 
-	public DresseurServiceImpl(DresseurRepository repository, PokemonServiceImpl pokemonService, CardService cardService) {
+	public DresseurServiceImpl(DresseurRepository repository, PokemonServiceImpl pokemonService, CardServiceImpl cardServiceImpl) {
 		this.repository = repository;
 		this.pokemonService = pokemonService;
-		this.cardService = cardService;
+		this.cardServiceImpl = cardServiceImpl;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class DresseurServiceImpl implements IDresseurService {
 	@Override
 	public void possederCartes(String uuid) {
 		Dresseur dresseur = findById(uuid);
-		List<Card> card = cardService.getAllCards();
+		List<Card> card = cardServiceImpl.getAllCards();
 		dresseur.getCardList().add((Card) card);
 		repository.save(dresseur);
 	}
