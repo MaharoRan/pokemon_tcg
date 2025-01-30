@@ -3,6 +3,7 @@ package fr.efrei.pokemon_tcg.controllers;
 import fr.efrei.pokemon_tcg.dto.CapturePokemon;
 import fr.efrei.pokemon_tcg.dto.CardDTO;
 import fr.efrei.pokemon_tcg.dto.DresseurDTO;
+import fr.efrei.pokemon_tcg.dto.CardExchangeDTO;
 import fr.efrei.pokemon_tcg.models.Card;
 import fr.efrei.pokemon_tcg.models.Draw;
 import fr.efrei.pokemon_tcg.models.Dresseur;
@@ -14,8 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -103,5 +106,17 @@ public class DresseurController {
 		else if (chance < 90) return 3;
 		else if (chance < 98) return 4;
 		else return 5;
+	}
+
+	@PatchMapping("/{uuid}/echangerCartes")
+	public ResponseEntity<?> echangerCartes(@PathVariable String uuid, @RequestBody CardExchangeDTO exchangeDTO, @RequestBody DresseurDTO dresseurDTO) {
+		Dresseur dresseur = dresseurService.findById(uuid);
+		if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDateTime.now())) {
+			return new ResponseEntity<>("Vous ne pouvez échanger des cartes qu'une fois par jour.", HttpStatus.FORBIDDEN);    
+		} 
+		LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+		dresseur.setLastExchangeDate(startOfDay);
+		dresseurService.create(dresseurDTO);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

@@ -32,6 +32,8 @@ public class Dresseur {
 	@OneToMany
 	private List<Draw> drawList;
 
+	private LocalDateTime lastExchangeDate;
+
 	public String getUuid() {
 		return uuid;
 	}
@@ -103,4 +105,13 @@ public class Dresseur {
 	public void setLastDrawDate(LocalDateTime lastDrawDate) {
 		this.lastDrawDate = lastDrawDate;
 	}
+
+	public LocalDateTime getLastExchangeDate() {
+		return lastExchangeDate;
+	}
+
+	public void setLastExchangeDate(LocalDateTime lastExchangeDate) {
+		this.lastExchangeDate = lastExchangeDate;
+	}
+
 }
