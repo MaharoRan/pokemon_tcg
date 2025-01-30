@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -25,10 +26,14 @@ public class DresseurController {
 
 	private final IDresseurService dresseurService;
 	private final CardServiceImpl cardServiceImpl;
+	private final DresseurServiceImpl dresseurServiceImpl;
+	private DrawServiceImpl drawServiceImpl ;
 
-	public DresseurController(DresseurServiceImpl dresseurService, CardServiceImpl cardServiceImpl) {
+	public DresseurController(DresseurServiceImpl dresseurService, CardServiceImpl cardServiceImpl, DresseurServiceImpl dresseurServiceImpl) {
 		this.dresseurService = dresseurService;
 		this.cardServiceImpl = cardServiceImpl;
+		this.drawServiceImpl = drawServiceImpl;
+		this.dresseurServiceImpl = dresseurServiceImpl;
 	}
 
 	@GetMapping
@@ -57,36 +62,30 @@ public class DresseurController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	/* @PatchMapping("/{uuid}/tirer")
-	public ResponseEntity<?> tirerCartes(@RequestBody String uuid) {
-		List<CardDTO> cards = cardDTO.
-		List<Draw> draws = drawServiceImpl.getAllDraws();
-		Random random = new Random();
-
-		for (int i = 0; i < 5; i++) {
-			Card card = cards.get(random.nextInt(cards.size()));
-			Draw draw = new Draw();
-			draws.add(draw);
-		}
-
-		 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}*/
-
 	@PatchMapping("/{uuid}/createDresseurCards")
 	public ResponseEntity<?> createDresseurCards(
 			@PathVariable String uuid,
 			@RequestBody DresseurDTO dresseurDTO) {
-		for (int i = 0; i < 5; i++) {
-			CardDTO card = new CardDTO();
+			List<Card> cards = cardServiceImpl.getAllCards();
+			List<Draw> draws = drawServiceImpl.getAllDraws();
+			Random random = new Random();
 
-			if (dresseurDTO.getCardList().size() < 5) {
-				dresseurDTO.getCardList().add(card);
-			} else {
-				dresseurDTO.getSecondCardList().add(card);
+			for (int i = 0; i < 5; i++) {
+				Card card = cards.get(random.nextInt(cards.size()));
+				Draw draw = new Draw();
+				draws.add(draw);
 			}
+			for (int i = 0; i < 5; i++) {
+				CardDTO card = new CardDTO();
+
+				if (dresseurDTO.getCardList().size() < 5) {
+					dresseurDTO.getCardList().add(card);
+				} else {
+					dresseurDTO.getSecondCardList().add(card);
+				}
+			}
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
 
 	@PatchMapping("/{uuid}/acheter")
 	public ResponseEntity<?> acheter() {

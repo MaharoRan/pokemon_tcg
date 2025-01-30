@@ -18,6 +18,8 @@ public class Dresseur {
 
 	private LocalDateTime deletedAt;
 
+	private LocalDateTime lastDrawDate;
+
 	@OneToMany
 	List<Pokemon> pokemonList;
 
@@ -26,6 +28,9 @@ public class Dresseur {
 
 	@OneToMany
 	private List<Card> secondCardList;
+
+	@OneToMany
+	private List<Draw> drawList;
 
 	public String getUuid() {
 		return uuid;
@@ -81,5 +86,21 @@ public class Dresseur {
 
 	public void setSecondCardList(List<Card> secondCardList) {
 		this.secondCardList = secondCardList;
+	}
+
+	public List<Draw> getDrawList() {
+		return drawList;
+	}
+
+	public void setDrawList(List<Draw> drawList) {
+		this.drawList = drawList;
+	}
+
+	public LocalDateTime getLastDrawDate() {
+		return lastDrawDate;
+	}
+
+	public void setLastDrawDate(LocalDateTime lastDrawDate) {
+		this.lastDrawDate = lastDrawDate;
 	}
 }

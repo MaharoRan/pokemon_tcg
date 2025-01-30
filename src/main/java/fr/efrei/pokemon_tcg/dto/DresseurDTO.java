@@ -1,7 +1,5 @@
 package fr.efrei.pokemon_tcg.dto;
 
-import fr.efrei.pokemon_tcg.models.Card;
-
 import java.util.List;
 
 public class DresseurDTO {
@@ -9,17 +7,11 @@ public class DresseurDTO {
 
 	private String prenom;
 
-	private List<Card> cardList;
+	private List<CardDTO> cardList;
 
-	private List<Card> secondCardList;
+	private List<CardDTO> secondCardList;
 
-	public List<Card> getCardList() {
-		return cardList;
-	}
-
-	public List<Card> getSecondCardList() {
-		return secondCardList;
-	}
+	private List<DrawDTO> drawList;
 
 	public String getNom() {
 		return nom;
@@ -27,5 +19,17 @@ public class DresseurDTO {
 
 	public String getPrenom() {
 		return prenom;
+	}
+
+	public List<CardDTO> getCardList() {
+		return cardList;
+	}
+
+	public List<CardDTO> getSecondCardList() {
+		return secondCardList;
+	}
+
+	public List<DrawDTO> getDrawList() {
+		return drawList;
 	}
 }
