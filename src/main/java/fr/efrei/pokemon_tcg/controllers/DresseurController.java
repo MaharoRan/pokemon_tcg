@@ -4,6 +4,7 @@ import fr.efrei.pokemon_tcg.dto.CapturePokemon;
 import fr.efrei.pokemon_tcg.dto.CardDTO;
 import fr.efrei.pokemon_tcg.dto.DrawDTO;
 import fr.efrei.pokemon_tcg.dto.DresseurDTO;
+import fr.efrei.pokemon_tcg.dto.CardExchangeDTO;
 import fr.efrei.pokemon_tcg.models.Card;
 import fr.efrei.pokemon_tcg.models.Draw;
 import fr.efrei.pokemon_tcg.models.Dresseur;
@@ -95,13 +96,15 @@ public class DresseurController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-@GetMapping("/{uuid}/echangerCartes")
-public ResponseEntity<?> echangerCartes(@PathVariable String uuid, @RequestBody CardExchangeDTO exchangeDTO) {
-	    Dresseur dresseur = dresseurService.findById(uuid);
-		    if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDateTime.now())) {
-				        return new ResponseEntity<>("Vous ne pouvez échanger des cartes qu'une fois par jour.", HttpStatus.FORBIDDEN);    } 
-						       dresseur.setLastExchangeDate(LocalDate.now());
-							       dresseurService.create(dresseurDTO);
-								       return new ResponseEntity<>(HttpStatus.OK);
-									}
+	@PatchMapping("/{uuid}/echangerCartes")
+	public ResponseEntity<?> echangerCartes(@PathVariable String uuid, @RequestBody CardExchangeDTO exchangeDTO, @RequestBody DresseurDTO dresseurDTO) {
+		Dresseur dresseur = dresseurService.findById(uuid);
+		if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDateTime.now())) {
+			return new ResponseEntity<>("Vous ne pouvez échanger des cartes qu'une fois par jour.", HttpStatus.FORBIDDEN);    
+		} 
+		LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+		dresseur.setLastExchangeDate(startOfDay);
+		dresseurService.create(dresseurDTO);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
