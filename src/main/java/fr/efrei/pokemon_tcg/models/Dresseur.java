@@ -27,6 +27,8 @@ public class Dresseur {
 	@OneToMany
 	private List<Card> secondCardList;
 
+	private LocalDateTime lastExchangeDate;
+
 	public String getUuid() {
 		return uuid;
 	}
@@ -81,5 +83,13 @@ public class Dresseur {
 
 	public void setSecondCardList(List<Card> secondCardList) {
 		this.secondCardList = secondCardList;
+	}
+
+	public LocalDateTime getLastExchangeDate() {
+		return lastExchangeDate;
+	}
+
+	public void setLastExchangeDate(LocalDateTime lastExchangeDate) {
+		this.lastExchangeDate = lastExchangeDate;
 	}
 }

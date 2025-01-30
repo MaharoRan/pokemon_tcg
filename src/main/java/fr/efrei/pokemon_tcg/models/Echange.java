@@ -8,14 +8,14 @@ import fr.efrei.pokemon_tcg.models.Dresseur;
 import fr.efrei.pokemon_tcg.models.Card;
 
 @Entity
-@Table(name = "ECHANGE", uniqueConstraints = {
+@Table(name = "ECHANGE_POKEMON", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"dresseur1_id", "dresseur2_id", "date_echange"})
 })
 public class Echange {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private UUID idEchange;
 
     @ManyToOne
     @JoinColumn(name = "dresseur1_id", nullable = false)
@@ -50,12 +50,12 @@ public class Echange {
         this.participant2 = participant2;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getIdEchange() {
+        return idEchange;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setIdEchange(UUID idEchange) {
+        this.idEchange = idEchange;
     }
 
     public Dresseur getDresseur1() {
@@ -123,8 +123,8 @@ public class Echange {
     }
 
     public void displayExchangeDetails() {
-        System.out.println("Exchange between " + participant1 + " and " + participant2);
-        System.out.println("Cards involved:");
+        System.out.println("Echange entre " + participant1 + " et " + participant2);
+        System.out.println("Cartes impliquées:");
         for (Card card : cards) {
             System.out.println(card);
         }

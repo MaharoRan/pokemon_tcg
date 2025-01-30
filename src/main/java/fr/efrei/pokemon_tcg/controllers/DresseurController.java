@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -92,4 +94,14 @@ public class DresseurController {
 	public ResponseEntity<?> acheter() {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
+@GetMapping("/{uuid}/echangerCartes")
+public ResponseEntity<?> echangerCartes(@PathVariable String uuid, @RequestBody CardExchangeDTO exchangeDTO) {
+	    Dresseur dresseur = dresseurService.findById(uuid);
+		    if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDateTime.now())) {
+				        return new ResponseEntity<>("Vous ne pouvez échanger des cartes qu'une fois par jour.", HttpStatus.FORBIDDEN);    } 
+						       dresseur.setLastExchangeDate(LocalDate.now());
+							       dresseurService.create(dresseurDTO);
+								       return new ResponseEntity<>(HttpStatus.OK);
+									}
 }
