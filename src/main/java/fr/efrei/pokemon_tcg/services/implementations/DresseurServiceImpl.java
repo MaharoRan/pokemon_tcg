@@ -64,12 +64,4 @@ public class DresseurServiceImpl implements IDresseurService {
 		repository.save(dresseur);
 		return true;
 	}
-
-	@Override
-	public void possederCartes(String uuid) {
-		Dresseur dresseur = findById(uuid);
-		List<Card> card = cardServiceImpl.getAllCards();
-		dresseur.getCardList().add((Card) card);
-		repository.save(dresseur);
-	}
 }

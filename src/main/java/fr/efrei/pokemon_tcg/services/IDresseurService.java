@@ -17,5 +17,4 @@ public interface IDresseurService {
 
 	void capturerPokemon(String uuid, CapturePokemon capturePokemon);
 
-	void possederCartes(String uuid);
 }
