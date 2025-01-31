@@ -131,9 +131,9 @@ public class DresseurController {
             return new ResponseEntity<>("Dresseur introuvable.", HttpStatus.NOT_FOUND);
         }
 
-        if (direction.equals("toSecondary")) {
+        if (direction.equalsIgnoreCase("toSecondary")) {
             Card cardToMove = dresseur.getCardList().stream()
-                    .filter(card -> card.getUuid().equals(cardId))
+                    .filter(card -> card.getUuid().equalsIgnoreCase(cardId))
                     .findFirst()
                     .orElse(null);
 
@@ -144,9 +144,9 @@ public class DresseurController {
             dresseur.getCardList().remove(cardToMove);
             dresseur.getSecondCardList().add(cardToMove);
 
-        } else if (direction.equals("toMain")) {
+        } else if (direction.equalsIgnoreCase("toMain")) {
             Card cardToMove = dresseur.getSecondCardList().stream()
-                    .filter(card -> card.getUuid().equals(cardId))
+                    .filter(card -> card.getUuid().equalsIgnoreCase(cardId))
                     .findFirst()
                     .orElse(null);
 
