@@ -120,7 +120,7 @@ public class DresseurController {
 		else return 5;
 	}
 
-    @PatchMapping("/{uuid}/deckExchanges")
+    @PatchMapping("/{uuid}/echangerDeckCartes")
     public ResponseEntity<?> echangerDeDeck(
             @PathVariable String uuid,
             @RequestParam String cardId,
@@ -165,7 +165,7 @@ public class DresseurController {
         return new ResponseEntity<>("Carte échangée avec succès.", HttpStatus.OK);
     }
 
-	@PatchMapping("/{uuid}/echangerCartes")
+	@PatchMapping("/{uuid}/echangerDresseursCartes")
 	public ResponseEntity<?> echangerCartes(@PathVariable String uuid, @RequestBody CardExchangeDTO exchangeDTO, @RequestBody DresseurDTO dresseurDTO) {
 		Dresseur dresseur = dresseurService.findById(uuid);
 		if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDateTime.now())) {
