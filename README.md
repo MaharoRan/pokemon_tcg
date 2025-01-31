@@ -10,7 +10,7 @@ Fonctionnalités principales :
 
 	•	Echange de cartes entre deux joueurs limité à une fois par jour.
 
-	•	Echange de deck : le gagnant remporte la meilleure carte du perdant.
+	•	Echange de deck : le dresseur peut echanger ses cartes principales et secondaires.
     
 	•	Authentification requise pour utiliser l’API (gestion des accès dans le fichier de sécurité situé dans le dossier …\pokemon_tcg\src\main\java\fr\efrei\pokemon_tcg\ ).
 
