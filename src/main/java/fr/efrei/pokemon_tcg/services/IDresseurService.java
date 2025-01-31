@@ -10,6 +10,7 @@ public interface IDresseurService {
 
 	List<Dresseur> findAll();
 	Dresseur findById(String uuid);
+
 	void create(DresseurDTO dresseurDTO);
 
 	boolean update(String uuid, DresseurDTO dresseurDTO);

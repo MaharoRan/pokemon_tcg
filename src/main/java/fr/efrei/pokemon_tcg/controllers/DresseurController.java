@@ -7,6 +7,8 @@ import fr.efrei.pokemon_tcg.dto.CardExchangeDTO;
 import fr.efrei.pokemon_tcg.models.Card;
 import fr.efrei.pokemon_tcg.models.Draw;
 import fr.efrei.pokemon_tcg.models.Dresseur;
+import fr.efrei.pokemon_tcg.repositories.CardRepository;
+import fr.efrei.pokemon_tcg.repositories.DresseurRepository;
 import fr.efrei.pokemon_tcg.services.IDresseurService;
 import fr.efrei.pokemon_tcg.services.implementations.CardServiceImpl;
 import fr.efrei.pokemon_tcg.services.implementations.DrawServiceImpl;
@@ -30,13 +32,17 @@ public class DresseurController {
     private final IDresseurService dresseurService;
     private final CardServiceImpl cardServiceImpl;
     private final DresseurServiceImpl dresseurServiceImpl;
+    private final CardRepository cardRepository;
+    private final DresseurRepository dresseurRepository;
     private DrawServiceImpl drawServiceImpl;
 
-    public DresseurController(DresseurServiceImpl dresseurService, CardServiceImpl cardServiceImpl, DresseurServiceImpl dresseurServiceImpl) {
+    public DresseurController(DresseurServiceImpl dresseurService, CardServiceImpl cardServiceImpl, DresseurServiceImpl dresseurServiceImpl, CardRepository cardRepository, DresseurRepository dresseurRepository) {
         this.dresseurService = dresseurService;
         this.cardServiceImpl = cardServiceImpl;
         this.drawServiceImpl = drawServiceImpl;
         this.dresseurServiceImpl = dresseurServiceImpl;
+        this.cardRepository = cardRepository;
+        this.dresseurRepository = dresseurRepository;
     }
 
     @GetMapping
@@ -80,20 +86,25 @@ public class DresseurController {
 			List<Card> newCards = new ArrayList<>();
 			for (int i = 0; i < 5; i++) {
 				Card card = generateRandomCard();
-				newCards.add(card);
+                card = cardRepository.save(card);
+                newCards.add(card);
 			}
 
-			dresseur.setLastDrawDate(LocalDateTime.now());
-			DresseurDTO dresseurDTO = new DresseurDTO();
-			dresseurService.create(dresseurDTO);
+            if(dresseur.getCardList().size()<5) {
+                dresseur.getCardList().addAll(newCards);
+            }else {
+                dresseur.getSecondCardList().addAll(newCards);
+            }
+            dresseur.setLastDrawDate(LocalDateTime.now());
+            dresseurRepository.save(dresseur);
 
-			return new ResponseEntity<>(newCards, HttpStatus.OK);
+            return new ResponseEntity<>(newCards, HttpStatus.OK);
 		}
     }
 
     private Card generateRandomCard() {
         Card card = new Card();
-		card.setAttack1("Attaque1");
+        card.setAttack1("Attaque1");
 		card.setAttack2("Attaque2");
         card.setRarity(generateRarity());
         return card;
@@ -108,6 +119,51 @@ public class DresseurController {
 		else if (chance < 98) return 4;
 		else return 5;
 	}
+
+    @PatchMapping("/{uuid}/deckExchanges")
+    public ResponseEntity<?> echangerDeDeck(
+            @PathVariable String uuid,
+            @RequestParam String cardId,
+            @RequestParam String direction
+    ) {
+        Dresseur dresseur = dresseurService.findById(uuid);
+        if (dresseur == null) {
+            return new ResponseEntity<>("Dresseur introuvable.", HttpStatus.NOT_FOUND);
+        }
+
+        if (direction.equals("toSecondary")) {
+            Card cardToMove = dresseur.getCardList().stream()
+                    .filter(card -> card.getUuid().equals(cardId))
+                    .findFirst()
+                    .orElse(null);
+
+            if (cardToMove == null) {
+                return new ResponseEntity<>("Carte introuvable dans le paquet principal.", HttpStatus.NOT_FOUND);
+            }
+
+            dresseur.getCardList().remove(cardToMove);
+            dresseur.getSecondCardList().add(cardToMove);
+
+        } else if (direction.equals("toMain")) {
+            Card cardToMove = dresseur.getSecondCardList().stream()
+                    .filter(card -> card.getUuid().equals(cardId))
+                    .findFirst()
+                    .orElse(null);
+
+            if (cardToMove == null) {
+                return new ResponseEntity<>("Carte introuvable dans le paquet secondaire.", HttpStatus.NOT_FOUND);
+            }
+
+            dresseur.getSecondCardList().remove(cardToMove);
+            dresseur.getSecondCardList().add(cardToMove);
+        } else {
+            return new ResponseEntity<>("Direction invalide. Utilisez 'toSecondary' ou 'toMain'.", HttpStatus.BAD_REQUEST);
+        }
+
+        dresseurRepository.save(dresseur);
+
+        return new ResponseEntity<>("Carte échangée avec succès.", HttpStatus.OK);
+    }
 
 	@PatchMapping("/{uuid}/echangerCartes")
 	public ResponseEntity<?> echangerCartes(@PathVariable String uuid, @RequestBody CardExchangeDTO exchangeDTO, @RequestBody DresseurDTO dresseurDTO) {
