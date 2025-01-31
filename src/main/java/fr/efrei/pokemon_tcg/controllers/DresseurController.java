@@ -80,7 +80,7 @@ public class DresseurController {
     public ResponseEntity<List<Card>> tirerCartes(@PathVariable String uuid) {
         Dresseur dresseur = dresseurService.findById(uuid);
 
-        if (dresseur.getLastDrawDate() != null && dresseur.getLastDrawDate().isEqual(LocalDate.now().atStartOfDay())) {
+        if (dresseur.getLastDrawDate() != null && dresseur.getLastDrawDate().isEqual(LocalDate.now())) {
             return new ResponseEntity<>(List.of(), HttpStatus.FORBIDDEN);
         } else {
             List<Card> newCards = new ArrayList<>();
@@ -95,7 +95,7 @@ public class DresseurController {
             } else {
                 dresseur.getSecondCardList().addAll(newCards);
             }
-            dresseur.setLastDrawDate(LocalDateTime.now());
+            dresseur.setLastDrawDate(LocalDate.now());
             dresseurRepository.save(dresseur);
 
             return new ResponseEntity<>(newCards, HttpStatus.OK);
@@ -177,7 +177,7 @@ public class DresseurController {
             return new ResponseEntity<>("Dresseur introuvable.", HttpStatus.NOT_FOUND);
         }
 
-        if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDate.now().atStartOfDay())) {
+        if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDate.now())) {
             return new ResponseEntity<>(List.of(), HttpStatus.FORBIDDEN);
         } else {
 
@@ -194,7 +194,7 @@ public class DresseurController {
                 dresseur.getCardList().remove(cardToMove);
                 dresseurDirection.getCardList().add(cardToMove);
             }
-            dresseur.setLastExchangeDate((LocalDateTime.now()));
+            dresseur.setLastExchangeDate(LocalDate.now());
             dresseurRepository.save(dresseur);
 
             return new ResponseEntity<>("Carte échangée avec l'autre dresseur.", HttpStatus.OK);

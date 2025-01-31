@@ -2,6 +2,7 @@ package fr.efrei.pokemon_tcg.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class Dresseur {
 
 	private LocalDateTime deletedAt;
 
-	private LocalDateTime lastDrawDate;
+	private LocalDate lastDrawDate;
 
 	@OneToMany
 	List<Pokemon> pokemonList;
@@ -32,7 +33,7 @@ public class Dresseur {
 	@OneToMany
 	private List<Draw> drawList;
 
-	private LocalDateTime lastExchangeDate;
+	private LocalDate lastExchangeDate;
 
 	public String getUuid() {
 		return uuid;
@@ -98,19 +99,19 @@ public class Dresseur {
 		this.drawList = drawList;
 	}
 
-	public LocalDateTime getLastDrawDate() {
+	public LocalDate getLastDrawDate() {
 		return lastDrawDate;
 	}
 
-	public void setLastDrawDate(LocalDateTime lastDrawDate) {
+	public void setLastDrawDate(LocalDate lastDrawDate) {
 		this.lastDrawDate = lastDrawDate;
 	}
 
-	public LocalDateTime getLastExchangeDate() {
+	public LocalDate getLastExchangeDate() {
 		return lastExchangeDate;
 	}
 
-	public void setLastExchangeDate(LocalDateTime lastExchangeDate) {
+	public void setLastExchangeDate(LocalDate lastExchangeDate) {
 		this.lastExchangeDate = lastExchangeDate;
 	}
 
