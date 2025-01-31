@@ -26,6 +26,7 @@ public class CardController {
     }
 
     @PostMapping
+    //request_body in cardDTO
     public ResponseEntity<?> createCard(@RequestBody CardDTO card) {
         card.setRarity(generateRarity());
         return new ResponseEntity<>(cardServiceImpl.saveCard(card),HttpStatus.CREATED);
