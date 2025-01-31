@@ -80,45 +80,45 @@ public class DresseurController {
     public ResponseEntity<List<Card>> tirerCartes(@PathVariable String uuid) {
         Dresseur dresseur = dresseurService.findById(uuid);
 
-        if (dresseur.getLastDrawDate() != null && dresseur.getLastDrawDate().isEqual(LocalDateTime.now())) {
+        if (dresseur.getLastDrawDate() != null && dresseur.getLastDrawDate().isEqual(LocalDate.now().atStartOfDay())) {
             return new ResponseEntity<>(List.of(), HttpStatus.FORBIDDEN);
-        }else {
-			List<Card> newCards = new ArrayList<>();
-			for (int i = 0; i < 5; i++) {
-				Card card = generateRandomCard();
+        } else {
+            List<Card> newCards = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                Card card = generateRandomCard();
                 card = cardRepository.save(card);
                 newCards.add(card);
-			}
+            }
 
-            if(dresseur.getCardList().size()<5) {
+            if (dresseur.getCardList().size() < 5) {
                 dresseur.getCardList().addAll(newCards);
-            }else {
+            } else {
                 dresseur.getSecondCardList().addAll(newCards);
             }
             dresseur.setLastDrawDate(LocalDateTime.now());
             dresseurRepository.save(dresseur);
 
             return new ResponseEntity<>(newCards, HttpStatus.OK);
-		}
+        }
     }
 
     private Card generateRandomCard() {
         Card card = new Card();
         card.setAttack1("Attaque1");
-		card.setAttack2("Attaque2");
+        card.setAttack2("Attaque2");
         card.setRarity(generateRarity());
         return card;
     }
 
-	private int generateRarity() {
-		Random random = new Random();
-		int chance = random.nextInt(100);
-		if (chance < 50) return 1;
-		else if (chance < 80) return 2;
-		else if (chance < 90) return 3;
-		else if (chance < 98) return 4;
-		else return 5;
-	}
+    private int generateRarity() {
+        Random random = new Random();
+        int chance = random.nextInt(100);
+        if (chance < 50) return 1;
+        else if (chance < 80) return 2;
+        else if (chance < 90) return 3;
+        else if (chance < 98) return 4;
+        else return 5;
+    }
 
     @PatchMapping("/{uuid}/echangerDeckCartes")
     public ResponseEntity<?> echangerDeDeck(
@@ -165,15 +165,40 @@ public class DresseurController {
         return new ResponseEntity<>("Carte échangée avec succès.", HttpStatus.OK);
     }
 
-	@PatchMapping("/{uuid}/echangerDresseursCartes")
-	public ResponseEntity<?> echangerCartes(@PathVariable String uuid, @RequestBody CardExchangeDTO exchangeDTO, @RequestBody DresseurDTO dresseurDTO) {
-		Dresseur dresseur = dresseurService.findById(uuid);
-		if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDateTime.now())) {
-			return new ResponseEntity<>("Vous ne pouvez échanger des cartes qu'une fois par jour.", HttpStatus.FORBIDDEN);    
-		} 
-		LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-		dresseur.setLastExchangeDate(startOfDay);
-		dresseurService.create(dresseurDTO);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    @PatchMapping("/{uuid}/echangerDresseurCartes")
+    public ResponseEntity<?> echangerCartes(
+            @PathVariable String uuid,
+            @RequestParam String cardId,
+            @RequestParam String dresseurDirectionId
+    ) {
+        Dresseur dresseur = dresseurService.findById(uuid);
+        Dresseur dresseurDirection = dresseurService.findById(dresseurDirectionId);
+        if (dresseur == null) {
+            return new ResponseEntity<>("Dresseur introuvable.", HttpStatus.NOT_FOUND);
+        }
+
+        if (dresseur.getLastExchangeDate() != null && dresseur.getLastExchangeDate().isEqual(LocalDate.now().atStartOfDay())) {
+            return new ResponseEntity<>(List.of(), HttpStatus.FORBIDDEN);
+        } else {
+
+            if (dresseurDirectionId.equalsIgnoreCase(dresseurDirection.getUuid())) {
+                Card cardToMove = dresseur.getCardList().stream()
+                        .filter(card -> card.getUuid().equalsIgnoreCase(cardId))
+                        .findFirst()
+                        .orElse(null);
+
+                if (cardToMove == null) {
+                    return new ResponseEntity<>("Carte introuvable dans le paquet principal pour ce dresseur", HttpStatus.NOT_FOUND);
+                }
+
+                dresseur.getCardList().remove(cardToMove);
+                dresseurDirection.getCardList().add(cardToMove);
+            }
+            dresseur.setLastExchangeDate((LocalDateTime.now()));
+            dresseurRepository.save(dresseur);
+
+            return new ResponseEntity<>("Carte échangée avec l'autre dresseur.", HttpStatus.OK);
+
+        }
+    }
 }
