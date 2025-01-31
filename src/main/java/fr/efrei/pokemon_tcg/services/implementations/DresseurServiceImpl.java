@@ -2,7 +2,6 @@ package fr.efrei.pokemon_tcg.services.implementations;
 
 import fr.efrei.pokemon_tcg.dto.CapturePokemon;
 import fr.efrei.pokemon_tcg.dto.DresseurDTO;
-import fr.efrei.pokemon_tcg.models.Card;
 import fr.efrei.pokemon_tcg.models.Dresseur;
 import fr.efrei.pokemon_tcg.models.Pokemon;
 import fr.efrei.pokemon_tcg.repositories.DresseurRepository;
@@ -36,6 +35,7 @@ public class DresseurServiceImpl implements IDresseurService {
 		return repository.findById(uuid).orElse(null);
 	}
 
+	@Override
 	public void capturerPokemon(String uuid, CapturePokemon capturePokemon) {
 		Dresseur dresseur = findById(uuid);
 		Pokemon pokemon = pokemonService.findById(capturePokemon.getUuid());

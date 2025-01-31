@@ -31,7 +31,7 @@ public class CardServiceImpl implements ICardService {
         card.setPokemonUuid(cardDTO.getPokemon_id());
         card.setAttack1(cardDTO.getAttack1());
         card.setAttack2(cardDTO.getAttack2());
-        return card;
+        return cardRepository.save(card);
     }
 
 }
