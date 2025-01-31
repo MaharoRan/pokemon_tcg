@@ -124,7 +124,7 @@ public class DresseurController {
     public ResponseEntity<?> echangerDeDeck(
             @PathVariable String uuid,
             @RequestParam String cardId,
-            @RequestParam String direction
+            @RequestParam String direction //"to main" si vers le paquet de cartes principal, "to Secondary" si vers le paquet de cartes secondaire
     ) {
         Dresseur dresseur = dresseurService.findById(uuid);
         if (dresseur == null) {
@@ -169,7 +169,7 @@ public class DresseurController {
     public ResponseEntity<?> echangerCartes(
             @PathVariable String uuid,
             @RequestParam String cardId,
-            @RequestParam String dresseurDirectionId
+            @RequestParam String dresseurDirectionId //Id du dresseur vers lequel la carte est envoyée
     ) {
         Dresseur dresseur = dresseurService.findById(uuid);
         Dresseur dresseurDirection = dresseurService.findById(dresseurDirectionId);
